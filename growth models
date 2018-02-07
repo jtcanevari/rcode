@@ -1,0 +1,25 @@
+library(minpack.lm)
+brody = nlsLM(Weight ~ a*(1-b*(exp(-c*age))),
+                     start=list(a=90,
+                                b=3.0,
+                                c=0.05),
+                     data = dat)
+coef(brody)
+
+par(xaxs = 'i', yaxs = 'i')
+plot(Weight ~ age, data = dat,ylim=c(0,120), xlim=c(0,2000))
+lines(0:2000, 
+      predict(brody, 
+              newdata = data.frame(age = 0:2000)), col = 'green')
+                     
+
+
+gompertz = nlsLM(Weight ~ a*(1-b*(exp(-c*age))),
+              start=list(a=90,
+                         b=3.0,
+                         c=0.05),
+              data = dat)
+
+lines(0:2000, 
+      predict(gompertz, 
+              newdata = data.frame(age = 0:2000)), col = 'red')
