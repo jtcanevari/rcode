@@ -1,0 +1,5 @@
+library(survival)
+
+index <- neardate(dat$cowkey, calv$CowKey, dat$Date, calv$calvDate, best = "prior",
+         nomatch = NA_integer_)
+dat$calvDate <- calv$calvDate[index]
