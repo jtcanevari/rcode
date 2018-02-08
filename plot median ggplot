@@ -1,0 +1,7 @@
+ggplot(mer.dat, aes(x=test.date, y=mer.dat$scc, colour = as.factor(farm))) + 
+  stat_summary(fun.y = "median", geom = "line", size = 1.2)+
+  ylab('Median ICCC')+
+  xlab('Date')+
+  labs(colour='Farm') +
+  scale_x_date(date_breaks = "2 month",date_labels = "%B_%y")+
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
