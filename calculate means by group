@@ -1,0 +1,5 @@
+#X: the data
+#INDEX: a list() of factor variables
+#FUN: the function to be applied
+#use tapply(X, INDEX, FUN) to generate a table displaying each treatment group mean
+tapply(X = dataPairwiseComparisons$StressReduction, INDEX = list(dataPairwiseComparisons$Treatment), FUN = mean)
