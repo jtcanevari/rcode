@@ -1,0 +1,4 @@
+
+library(OptimalCutpoints)
+
+optimal.cutpoints('tropBIO', status = 'group', tag.healthy= 'WA', methods = "MaxSpSe", data = dat1, direction =  "<")
