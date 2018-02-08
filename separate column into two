@@ -1,0 +1,5 @@
+library(dplyr)
+library(tidyr)
+
+dat <- dat %>%
+  separate(A, c("A1", "A2"), "sep")
