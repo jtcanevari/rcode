@@ -1,0 +1,26 @@
+
+out <- as.data.frame.matrix(addmargins(xtabs(~ group + status, data=dat)))
+colnames(out)[1:2] <- c('neg','pos')
+out$est <- round(out$pos / out$Sum,2)
+
+library(epiR)
+
+out$lower <- NA
+for(i in 1:nrow(out)) {
+  out$lower[i] <- round(epi.conf(as.matrix(out[i,c(2,1)]),ctype = "prop.single")[[3]],2)
+}
+out$upper <- NA
+for(i in 1:nrow(out)) {
+  out$upper[i] <- round(epi.conf(as.matrix(out[i,c(2,1)]),ctype = "prop.single")[[4]],2)
+}
+dat <- dat[-nrow(dat),] 
+out$group <- 1:nrow(dat)
+
+library(ggplot2)
+windows(); ggplot(out, aes(x = group, y = est)) +
+  geom_point() +
+  geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.1) +
+  ylim(0, 0.8) +
+# facet.grid(algo~.)+
+  labs(title = "",
+       subtitle = "")
