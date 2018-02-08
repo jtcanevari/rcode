@@ -1,0 +1,41 @@
+# List goats and run wood's model
+
+goat.id <- unique(prod$CowKey)
+
+# Create empty vector for model parameters
+a.par <- NULL
+b.par <- NULL
+c.par <- NULL
+cum.milk <- NULL
+
+# Run loop fitting Wood's curve
+for (i in 1:length(goat.id)) {
+  tmp <- prod[prod$CowKey == goat.id[i],]
+  if(nrow(tmp) > 5){
+    start.param <- coef(lm(log(HTLitreTot) ~ log(dim) + dim, data = tmp))
+    start.param[3] <- -start.param[3]
+    z <- nlsLM(HTLitreTot ~ a*dim^(b)*exp(-c*dim), data = tmp, start = list(a=start.param[1], b=start.param[2],c=start.param[3] ) ,
+               control = list(maxiter=200, warnOnly=TRUE))
+    a.par[i] <- coef(z)[1]
+    b.par[i] <- coef(z)[2]
+    c.par[i] <- coef(z)[3]
+    # doset <- seq(1,calv$lact.l[calv$CowKey == goat.id[i]],1)  #milk to dof date
+    doset <- seq(1,290,1)
+    cum.milk[i] <- sum(predict(z, newdata = data.frame(dim = doset)))} else {cum.milk[i] <- NA}
+}
+
+# Plot to check
+windows()
+par(mfrow=c(3,3)) 
+for (i in 1:9) {
+  tmp <- prod[prod$CowKey == goat.id[i],]
+  start.param <- coef(lm(log(HTLitreTot) ~ log(dim) + dim, data = tmp))
+  start.param[3] <- -start.param[3]
+  
+  z <- nlsLM(HTLitreTot ~ a*dim^(b)*exp(-c*dim), data = tmp, start = list(a=start.param[1], b=start.param[2],c=start.param[3] ) ,
+             control = list(maxiter=200, warnOnly=TRUE))
+  
+  xnew<-seq(0,305 ,0.1)
+  yhat <- predict(z, newdata = data.frame(dim = xnew))
+  plot(tmp$dim,tmp$HTLitreTot, ylim = c(0,5), xlim = c(0,305), main = paste("goat ID:", unique(tmp$CowKey), sep = ""), xlab = "DIM", ylab = "Milk yield (L)")
+  lines(yhat ~ xnew, col = "red")
