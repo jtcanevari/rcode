@@ -1,0 +1,18 @@
+# https://guangchuangyu.github.io/seqcombo/
+
+library(seqinr); library(seqcombo); library(ips)
+
+
+dat <- read.fasta(file = "Recombination BOHV-1 Full genome Feedlot (1).fasta", 
+           seqtype = c("DNA"), as.string = FALSE, forceDNAtolower = TRUE,
+           set.attributes = TRUE, legacy.mode = TRUE, seqonly = FALSE, strip.desc = FALSE,
+           bfa = FALSE, sizeof.longlong = .Machine$sizeof.longlong,
+           endian = .Platform$endian, apply.mask = TRUE)
+
+tdat <- dat[c(1,2)]
+# write.fas(tdat, file = "tdat.fas", interleave = FALSE, truncate = FALSE, append = FALSE)
+fas <- read.fas("tdat.fas")
+
+x1 <- seqdiff('C:\\Temp\\tdat.fas', reference=1)
+x1
+plot(x1)
