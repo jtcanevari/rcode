@@ -1,0 +1,13 @@
+#PABAK
+
+library(epiR)
+## A positive, B positive: 34
+## A positive, B negative: 115
+## A negative, B positive: 41
+## A negative, B negative: 304
+
+dat <- as.table(matrix(c(34,115,41,304), nrow = 2, byrow = TRUE))
+colnames(dat) <- c("A-pos","B-neg")
+rownames(dat) <- c("A-pos","B-neg")
+
+epi.kappa(dat, method = "fleiss", alternative = "greater", conf.level = 0.95)
