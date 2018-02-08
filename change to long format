@@ -1,0 +1,3 @@
+library(tidyr)
+
+dat1 <- gather(dat, name.of.new.class.column, name.of.new.value.column, columns want to include)
