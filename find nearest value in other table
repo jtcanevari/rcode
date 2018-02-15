@@ -3,3 +3,19 @@ library(survival)
 index <- neardate(dat$cowkey, calv$CowKey, dat$Date, calv$calvDate, best = "prior",
          nomatch = NA_integer_)
 dat$calvDate <- calv$calvDate[index]
+
+
+#################################
+#another way to go using data.table
+#https://stackoverflow.com/questions/33357341/data-table-join-on-id-and-date-key-but-want-closest-date-before-or-equal-to
+
+setDT(dat16)
+setDT(calv)
+calv$VID <- as.character(calv$VID)
+indx <- calv[dat16, 
+             on = c(VID = "VID",
+                    calvDate = "test.date"), 
+             roll = Inf,
+             which = TRUE]
+dat16[, KiddingDate := calv[indx,calvDate]]
+dat16[, Lact := calv[indx,LactNo]]
