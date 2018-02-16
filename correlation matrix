@@ -1,0 +1,2 @@
+library(GGally)
+ggcorr(dat)
