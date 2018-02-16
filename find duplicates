@@ -1,0 +1,3 @@
+dat <- dat[!duplicated(dat[2:3]),] #get a df with unique dat[2] & dat[3]
+
+rep <- dat[duplicated(dat[2]) | duplicated(dat[2], fromLast=TRUE),] #see duplicates in dat[2]. 
