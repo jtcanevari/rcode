@@ -1,0 +1,10 @@
+set.seed(1)      # for reproducible example
+time <- 1:25
+df   <- data.frame(time,
+                   pop=rnorm(100*length(time), mean=10*time/(25+time)))
+
+library(ggplot2)
+ggplot(df, aes(x=time, y=pop))+ 
+  stat_summary(geom="ribbon", fun.data=mean_cl_normal, width=0.1, conf.int=0.95, fill="lightblue")+
+  stat_summary(geom="line", fun.y=mean, linetype="dashed")+
+  stat_summary(geom="point", fun.y=mean, color="red")
