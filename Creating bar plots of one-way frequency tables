@@ -1,0 +1,6 @@
+#7.2. Creating bar plots of one-way frequency tables
+#The barplot() function described above is also suited to draw simple graphs of
+#frequency tables. Going back to the previous command, we can type:
+g3<-round(prop.table(a),3)*100
+par(mar=c(4,8,2,2))
+barplot(g3,horiz=T, xlim=c(0,50), las=1)
