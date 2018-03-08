@@ -9,7 +9,7 @@ library(doBy)
 summaryBy(HOURPAY ~ GOVTOF2 + SEX, data=lfs2, FUN = c(mean, sd), na.rm=T)
 
 #for weighed means
-> library(plyr)
-> ddply(lfs_copy,~GOVTOF2,summarise,
+library(plyr)
+ddply(lfs_copy,~GOVTOF2,summarise,
 mean=weighted.mean(HOURPAY[HOURPAY>=0 & SUMHRS>=0],
  PIWT16[HOURPAY>=0 & SUMHRS>=0])) 
