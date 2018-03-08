@@ -3,3 +3,7 @@
 #FUN: the function to be applied
 #use tapply(X, INDEX, FUN) to generate a table displaying each treatment group mean
 tapply(X = dataPairwiseComparisons$StressReduction, INDEX = list(dataPairwiseComparisons$Treatment), FUN = mean)
+
+#another way to go
+library(doBy)
+summaryBy(HOURPAY ~ GOVTOF2 + SEX, data=lfs2, FUN = c(mean, sd), na.rm=T)
