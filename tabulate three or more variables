@@ -1,0 +1,13 @@
+#inbuilt in R there's xtab
+xtabs(~lfs_copy$GOVTOF2 + lfs_copy$ILODEFR + lfs_copy$SEX, drop.unused.levels=T)
+
+
+#The crosstab() command in the package 'descr' allows us to directly obtain a twoway
+contingency table with row and/or column percentages 
+
+library(descr)
+crosstab(nsex, nilodefr, prop.r=T, plot=F, digits=1)
+
+#or weighted
+crosstab(nsex, nilodefr, prop.r=T, plot=F,
+weight=lfs_copy$PWT16)
