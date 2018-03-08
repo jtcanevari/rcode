@@ -1,5 +1,0 @@
-# it is incredible how difficult it is to find a nice way to summarize data by group in r!!
-
-library(doBy)
-df <- summaryBy(scc ~ farm + year.month, data = dat, 
-          FUN = function(x) { c(m = median(x, na.rm = TRUE), Q1 = quantile(x,0.25, na.rm = TRUE), Q3 = quantile(x,0.75, na.rm = TRUE)) }) 
