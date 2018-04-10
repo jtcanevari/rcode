@@ -1,0 +1,13 @@
+library(epiR)
+  # generate a table of cell frequencies
+    # first set the levels of the outcome and the exposure so the frequencies in 
+    # the 2 by 2 table come out in the conventional format:
+      pig_adg$ar.g1 <- factor(pig_adg$ar.g1, levels = c(1,0))
+      pig_adg$pn <- factor(pig_adg$pn, levels = c(1,0))
+    # generate the 2X2 table
+      dat <- table(pig_adg$ar.g1, pig_adg$pn, dnn = c("Exposure", "Disease"))
+      print(dat)
+  # compute OR and other measures of association
+    pig.adg.or <- epi.2by2(dat = dat, method = "cohort.count", conf.level = 0.95,
+                 units = 100)
+    print(pig.adg.or)
