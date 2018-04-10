@@ -1,0 +1,42 @@
+# Compare regression coefficients for different models using the ggplot2 package --- linear regression:
+library(readstata13); library(nlme); library(lme4); library(ggplot2); library(scales)
+setwd ("C:\\COURSE")
+
+daisy <- read.dta13("daisy.dta", convert.factors = FALSE)
+daisy$lcalvcon <- log(daisy$calvcon)
+
+# Fit unconditional models for four predictors: milkfev, ovar, retpla, and metritis:
+mf.lm <- lm(lcalvcon ~ milkfev, data = daisy)
+ov.lm <- lm(lcalvcon ~ ovar, data = daisy)
+rp.lm <- lm(lcalvcon ~ retpla, data = daisy)
+me.lm <- lm(lcalvcon ~ metritis, data = daisy)
+
+# Fit multivariable model:
+mult.lm01 <- lm(lcalvcon ~ milkfev + ovar + retpla + metritis, data = daisy)
+
+# Add an interaction term between retpla and metritis:
+mult.lm02 <- lm(lcalvcon ~ milkfev + ovar + retpla * metritis, data = daisy)
+
+# Plot the unconditional and multivariable coefficients:
+unc.est <- c(coefficients(mf.lm)[2], coefficients(ov.lm)[2], coefficients(rp.lm)[2], coefficients(me.lm)[2])
+unc.low <- c(confint(mf.lm)[2,1], confint(ov.lm)[2,1], confint(rp.lm)[2,1], confint(me.lm)[2,1])
+unc.hig <- c(confint(mf.lm)[2,2], confint(ov.lm)[2,2], confint(rp.lm)[2,2], confint(me.lm)[2,2])
+
+mult.est01 <- coefficients(mult.lm01)[2:5]; mult.low01 <- confint(mult.lm01)[2:5,1]; mult.hig01 <- confint(mult.lm01)[2:5,2]
+mult.est02 <- coefficients(mult.lm02)[2:5]; mult.low02 <- confint(mult.lm02)[2:5,1]; mult.hig02 <- confint(mult.lm02)[2:5,2]
+
+var.names <- c("Milk fever", "Ovarian cyst", "RFM", "Metritis"); mod.names <- c("Unconditional", "Multivariable 1", "Multivariable 2")
+mod <- rep(mod.names, each = length(var.names))
+var <- rep(var.names, times = length(mod.names))
+dat <- data.frame(mod, var, est = c(unc.est, mult.est01, mult.est02), low = c(unc.low, mult.low01, mult.low02), hig = c(unc.hig, mult.hig01, mult.hig02))
+levels(dat$mod) <- c("Unconditional", "Multivariable 1", "Multivariable 2")
+
+ggplot(dat, aes(est, var)) +
+   geom_point() +
+   geom_errorbarh(aes(xmax = low, xmin = hig, height = 0.2)) +
+   facet_grid(mod ~ .) +
+   xlim(-0.5, 1.5) +
+   xlab("Estimated regression coefficient") +
+   ylab("Explanatory variable") +
+   # coord_fixed(ratio = 5 / 1) +
+   theme(axis.title.y = element_text(vjust = 0))
